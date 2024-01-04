@@ -78,7 +78,10 @@ const App = () => {
       const baskets = await basketmap.listOwnRegistryEntries()
       setMyBaskets(baskets)
       const certTypes = await certmap.listOwnRegistryEntries()
-      setMyCertTypes(certTypes)
+      setMyCertTypes(certTypes.map(x => ({
+        ...x,
+        fields: JSON.parse(x.fields)
+      })))
       const counterparties = await signia.listCertifiedPeers()
       setMyCounterparties(counterparties)
     })()
