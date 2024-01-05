@@ -208,8 +208,8 @@ const App = () => {
       certificateType
     )
     setMyCounterparties(c => ([...c, {
-      counterparty,
-      fields: {
+      subject: counterparty,
+      decryptedFields: {
         firstName,
         lastName,
         profilePhoto
@@ -283,9 +283,10 @@ const App = () => {
       <button onClick={registerCounterparty}>Register New Counterparty</button>
       {myCounterparties.map((c, i) => (
         <div key={i}>
-          <p><b>First name:</b> {c.fields.firstName}</p>
-          <p><b>Last name:</b> {c.fields.lastName}</p>
-          <p><b>Photo:</b> <a href={c.fields.profilePhoto} target='_blank'>{c.fields.profilePhoto}</a></p>
+          <p><b>Counterparty:</b> {c.subject}</p>
+          <p><b>First name:</b> {c.decryptedFields.firstName}</p>
+          <p><b>Last name:</b> {c.decryptedFields.lastName}</p>
+          <p><b>Photo:</b> <a href={c.decryptedFields.profilePhoto} target='_blank'>{c.decryptedFields.profilePhoto}</a></p>
           <p><b>Certificate Type:</b> {c.type}</p>
           <button onClick={revokeCounterparty(c)}>Revoke</button>
         </div>
