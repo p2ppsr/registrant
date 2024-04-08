@@ -3,7 +3,7 @@ import { ProtoMap, ConfederacyConfig as ProtomapConfederacyConfig } from 'babbag
 import { BasketMap, ConfederacyConfig as BasketmapConfederacyConfig } from 'basketmap'
 import { CertMap, ConfederacyConfig as CertmapConfederacyConfig } from 'certmap'
 import { Signia, ConfederacyConfig as SigniaConfederacyConfig } from 'babbage-signia'
-import { getPublicKey, getNetwork } from '@babbage/sdk'
+import { getPublicKey, getNetwork } from '@babbage/sdk-ts'
 
 const App = () => {
   const [confederacyHost, setConfederacyHost] = useState('https://confederacy.babbage.systems')
