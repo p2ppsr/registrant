@@ -154,7 +154,7 @@ const App = () => {
     const certType = window.prompt('Enter the certificate type')
     const name = window.prompt('Enter the friendly name')
     const iconURL = window.prompt('Enter the icon URL')
-    const description = window.prompt('Enter the certificate type description')
+    const description = window.prompt('Describe the certificate in a few words')
     const documentationURL = window.prompt('Enter the documentation URL')
     const fields = {}
     while (true) {
@@ -193,26 +193,22 @@ const App = () => {
   }
 
   const registerCounterparty = async () => {
-    const counterparty = window.prompt('Enter the counterparty public key')
-    const firstName = window.prompt('Enter the counterparty first name')
-    const lastName = window.prompt('Enter the counterparty last name')
-    const profilePhoto = window.prompt('Enter the profile photo URL')
-    const certificateType = window.prompt('Enter the type of certificate to issue')
+    const counterparty = window.prompt('Enter the entity public key')
+    const name = window.prompt('Enter the entity name')
+    const icon = window.prompt('Enter the entity icon URL')
     await signia.certifyPeer(
       counterparty,
       {
-        firstName,
-        lastName,
-        profilePhoto
+        name,
+        icon
       },
-      certificateType
+      'YoPsbfR6YQczjzPdHCoGC7nJsOdPQR50+SYqcWpJ0y0='
     )
     setMyCounterparties(c => ([...c, {
       subject: counterparty,
       decryptedFields: {
-        firstName,
-        lastName,
-        profilePhoto
+        name,
+        icon
       }
     }]))
   }
@@ -244,6 +240,8 @@ const App = () => {
       <button onClick={registerProtocol}>Register New Protocol</button>
       {myProtocols.map((p, i) => (
         <div key={i}>
+          <p><b>Security level:</b> {p.securityLevel}</p>
+          <p><b>Protocol ID:</b> {p.protocolID}</p>
           <p><b>Name:</b> {p.name}</p>
           <p><b>Description:</b> {p.description}</p>
           <p><b>Documentation:</b> <a href={p.documentationURL} target='_blank'>{p.documentationURL}</a></p>
@@ -255,6 +253,7 @@ const App = () => {
       <button onClick={registerBasket}>Register New Basket</button>
       {myBaskets.map((b, i) => (
         <div key={i}>
+          <p><b>ID:</b> {b.basketID}</p>
           <p><b>Name:</b> {b.name}</p>
           <p><b>Description:</b> {b.description}</p>
           <p><b>Documentation:</b> <a href={b.documentationURL} target='_blank'>{b.documentationURL}</a></p>
@@ -266,6 +265,7 @@ const App = () => {
       <button onClick={registerCertType}>Register New Certificate Type</button>
       {myCertTypes.map((c, i) => (
         <div key={i}>
+          <p><b>Certificate Type ID:</b> {c.certType}</p>
           <p><b>Name:</b> {c.name}</p>
           <p><b>Description:</b> {c.description}</p>
           <p><b>Documentation:</b> <a href={c.documentationURL} target='_blank'>{c.documentationURL}</a></p>
@@ -279,15 +279,13 @@ const App = () => {
           <button onClick={revokeCertType(c)}>Revoke</button>
         </div>
       ))}
-      <h2>My Counterparties</h2>
-      <button onClick={registerCounterparty}>Register New Counterparty</button>
+      <h2>Entities</h2>
+      <button onClick={registerCounterparty}>Register New Entity</button>
       {myCounterparties.map((c, i) => (
         <div key={i}>
-          <p><b>Counterparty:</b> {c.subject}</p>
-          <p><b>First name:</b> {c.decryptedFields.firstName}</p>
-          <p><b>Last name:</b> {c.decryptedFields.lastName}</p>
-          <p><b>Photo:</b> <a href={c.decryptedFields.profilePhoto} target='_blank'>{c.decryptedFields.profilePhoto}</a></p>
-          <p><b>Certificate Type:</b> {c.type}</p>
+          <p><b>Public Key:</b> {c.subject}</p>
+          <p><b>Name:</b> {c.decryptedFields.name}</p>
+          <p><b>Icon:</b> <a href={c.decryptedFields.icon} target='_blank'>{c.decryptedFields.icon}</a></p>
           <button onClick={revokeCounterparty(c)}>Revoke</button>
         </div>
       ))}
