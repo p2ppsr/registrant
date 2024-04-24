@@ -4,7 +4,7 @@
   "version": "0.1.2",
   "private": true,
   "dependencies": {
-    "@babbage/react-prompt": "^0.2.18",
+    "@babbage/react-prompt": "^0.2.19",
     "@babbage/sdk-ts": "^0.2.19",
     "babbage-protomap": "^0.2.15",
     "babbage-signia": "^0.2.25",
