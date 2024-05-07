@@ -159,8 +159,16 @@ const App = () => {
     const fields = {}
     while (true) {
       const key = window.prompt('Enter the name of a field')
-      const value = window.prompt(`Enter the description of the ${key} field`)
-      fields[key] = value
+      const friendlyName = window.prompt(`Enter the friendly name of the ${key} field`)
+      const description = window.prompt(`Enter the description of the ${key} field`)
+      const type = window.prompt(`Enter the type of the ${key} field ('text-0-to-30-characters' | 'text-30-to-100-characters' | 'text-over-100-characters' | 'image-url-https' | 'image-url-uhrp' | 'other')`)
+      const fieldIcon = window.prompt(`Enter icon URL for ${key} field`)
+      fields[key] = {
+        friendlyName,
+        description,
+        type,
+        fieldIcon
+      }
       const addMore = window.prompt('Add a new field? [y/n]')
       if (addMore.toLowerCase() === 'n') {
         break
@@ -271,11 +279,25 @@ const App = () => {
           <p><b>Documentation:</b> <a href={c.documentationURL} target='_blank'>{c.documentationURL}</a></p>
           <p><b>Icon:</b> <a href={c.iconURL} target='_blank'>{c.iconURL}</a></p>
           <h3>Fields:</h3>
-          <ul>
-            {Object.keys(c.fields).map((f, i) => (
+          {typeof c.fields[Object.keys(c.fields)[0]] === 'object'
+            ? <ul>
+              {Object.keys(c.fields).map((f, i) => {
+                return (
+                  <div key={i}>
+                    <li key={i}><b>field:</b> {f}</li>
+                    <li key={i}><b>friendlyName:</b> {c.fields[f].friendlyName}</li>
+                    <li key={i}><b>description:</b> {c.fields[f].description}</li>
+                    <li key={i}><b>type:</b> {c.fields[f].type}</li>
+                    <li key={i}><b>fieldIcon:</b> {c.fields[f].fieldIcon}</li>
+                  </div>
+                )
+              })}
+            </ul>
+            : Object.keys(c.fields).map((f, i) => (
               <li key={i}><b>{f}:</b> {c.fields[f]}</li>
-            ))}
-          </ul>
+            ))
+          }
+
           <button onClick={revokeCertType(c)}>Revoke</button>
         </div>
       ))}
