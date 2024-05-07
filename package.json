@@ -1,7 +1,7 @@
 {
   "name": "registrant",
   "description": "A simple frontend for registering entities like protocols and baskets",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "dependencies": {
     "@babbage/react-prompt": "^0.2.20",
