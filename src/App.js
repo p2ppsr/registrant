@@ -161,7 +161,7 @@ const App = () => {
       const key = window.prompt('Enter the name of a field')
       const friendlyName = window.prompt(`Enter the friendly name of the ${key} field`)
       const description = window.prompt(`Enter the description of the ${key} field`)
-      const type = window.prompt(`Enter the type of the ${key} field ('text-0-to-30-characters' | 'text-30-to-100-characters' | 'text-over-100-characters' | 'image-url-https' | 'image-url-uhrp' | 'other')`)
+      const type = window.prompt(`Enter the type of the ${key} field ('text' | 'imageURL' | 'other')`)
       const fieldIcon = window.prompt(`Enter icon URL for ${key} field`)
       fields[key] = {
         friendlyName,
