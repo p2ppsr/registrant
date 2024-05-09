@@ -222,7 +222,7 @@ const App = () => {
   }
 
   const revokeCounterparty = c => async () => {
-    await signia.revokeCertifiedPeer(c)
+    await signia.revokeCertification(c.token, 'Revoke peer certification')
     const myCounterpartiesCopy = [...myCounterparties]
     const indexToDelete = myCounterpartiesCopy.indexOf(c)
     myCounterpartiesCopy.splice(indexToDelete, 1)
