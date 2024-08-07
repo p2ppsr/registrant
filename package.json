@@ -7,9 +7,9 @@
     "@babbage/react-prompt": "^0.2.20",
     "@babbage/sdk-ts": "^0.2.47",
     "babbage-protomap": "^0.2.15",
-    "babbage-signia": "^0.2.40",
-    "basketmap": "^0.2.42",
-    "certmap": "^0.2.45",
+    "babbage-signia": "^0.2.41",
+    "basketmap": "^0.2.43",
+    "certmap": "^0.2.46",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
