@@ -5,11 +5,11 @@
   "private": true,
   "dependencies": {
     "@babbage/react-prompt": "^0.2.20",
-    "@babbage/sdk-ts": "^0.2.53",
+    "@babbage/sdk-ts": "^0.2.54",
     "babbage-protomap": "^0.2.15",
-    "babbage-signia": "^0.2.42",
-    "basketmap": "^0.2.44",
-    "certmap": "^0.2.47",
+    "babbage-signia": "^0.2.43",
+    "basketmap": "^0.2.45",
+    "certmap": "^0.2.48",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
