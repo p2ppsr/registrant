@@ -63,7 +63,17 @@ jobs:
           if [ -n "${CARS_WALLET_STORAGE:-}" ]; then
             storage_args=(--storage "$CARS_WALLET_STORAGE")
           fi
-          npx cars doctor Babbage "${storage_args[@]}"
+          for attempt in 1 2 3; do
+            if npx cars doctor Babbage "${storage_args[@]}"; then
+              exit 0
+            fi
+
+            status=$?
+            if [ "$attempt" -eq 3 ]; then
+              exit "$status"
+            fi
+            sleep "$((attempt * 20))"
+          done
 
       - name: Deploy CARS release
         if: steps.cars_secrets.outputs.enabled == 'true'
