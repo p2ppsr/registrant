@@ -15,7 +15,9 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - registrant-cars-deploy
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +66,7 @@ jobs:
             storage_args=(--storage "$CARS_WALLET_STORAGE")
           fi
           for attempt in 1 2 3; do
-            if npx cars doctor Babbage "${storage_args[@]}"; then
+            if timeout 90s npx cars doctor Babbage "${storage_args[@]}"; then
               exit 0
             fi
 
@@ -90,7 +92,7 @@ jobs:
 
           for attempt in 1 2 3; do
             log_file="cars-release-attempt-${attempt}.log"
-            if npx cars release now Babbage \
+            if timeout 180s npx cars release now Babbage \
               --key "$CARS_PRIVATE_KEY" \
               --network mainnet \
               "${storage_args[@]}" 2>&1 | tee "$log_file"; then
