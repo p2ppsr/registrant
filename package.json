@@ -15,7 +15,12 @@
   },
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "build": "webpack --config webpack.prod.js",
+    "cars": "cars",
+    "lars": "lars",
+    "lars:config": "lars config",
+    "cars:build": "cars build Babbage",
+    "cars:release": "cars release now Babbage"
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +44,8 @@
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
+    "@p2ppsr/cars-cli": "^1.2.13",
+    "@p2ppsr/lars": "^1.5.11",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",

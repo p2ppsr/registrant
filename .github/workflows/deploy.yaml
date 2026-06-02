@@ -1,0 +1,96 @@
+name: Deploy with CARS
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: registrant-cars
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check deployment secrets
+        id: cars_secrets
+        env:
+          CARS_PRIVATE_KEY: ${{ secrets.CARS_PRIVATE_KEY }}
+        run: |
+          if [ -z "$CARS_PRIVATE_KEY" ]; then
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Registrant CARS deployment skipped until CARS_PRIVATE_KEY is configured."
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build static frontend
+        if: steps.cars_secrets.outputs.enabled == 'true'
+        run: npm run build
+
+      - name: Prepare CARS frontend source
+        if: steps.cars_secrets.outputs.enabled == 'true'
+        run: |
+          set -euo pipefail
+          rm -rf frontend
+          cp -R build frontend
+
+      - name: Build CARS artifact
+        if: steps.cars_secrets.outputs.enabled == 'true'
+        run: npx cars build Babbage
+
+      - name: Check CARS transport
+        if: steps.cars_secrets.outputs.enabled == 'true'
+        env:
+          CARS_WALLET_STORAGE: ${{ secrets.CARS_WALLET_STORAGE }}
+        run: |
+          set -euo pipefail
+          storage_args=()
+          if [ -n "${CARS_WALLET_STORAGE:-}" ]; then
+            storage_args=(--storage "$CARS_WALLET_STORAGE")
+          fi
+          npx cars doctor Babbage "${storage_args[@]}"
+
+      - name: Deploy CARS release
+        if: steps.cars_secrets.outputs.enabled == 'true'
+        env:
+          CARS_PRIVATE_KEY: ${{ secrets.CARS_PRIVATE_KEY }}
+          CARS_WALLET_STORAGE: ${{ secrets.CARS_WALLET_STORAGE }}
+        run: |
+          set -euo pipefail
+
+          storage_args=()
+          if [ -n "${CARS_WALLET_STORAGE:-}" ]; then
+            storage_args=(--storage "$CARS_WALLET_STORAGE")
+          fi
+
+          for attempt in 1 2 3; do
+            log_file="cars-release-attempt-${attempt}.log"
+            if npx cars release now Babbage \
+              --key "$CARS_PRIVATE_KEY" \
+              --network mainnet \
+              "${storage_args[@]}" 2>&1 | tee "$log_file"; then
+              grep -q "CARS_RELEASE_SUCCESS" "$log_file"
+              exit 0
+            fi
+
+            status=${PIPESTATUS[0]}
+            if [ "$attempt" -eq 3 ]; then
+              exit "$status"
+            fi
+            sleep "$((attempt * 20))"
+          done
